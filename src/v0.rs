@@ -1,6 +1,6 @@
 type Rgba = [u8; 4];
 
-fn blend_rgba(bg: Rgba, fg: Rgba) -> Rgba {
+pub fn blend_rgba(_bg: Rgba, _fg: Rgba) -> Rgba {
     unimplemented!();
 }
 

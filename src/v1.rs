@@ -1,6 +1,6 @@
 type Rgba = [u8; 4];
 
-fn blend_rgba(bg: Rgba, fg: Rgba) -> Rgba {
+pub fn blend_rgba(bg: Rgba, fg: Rgba) -> Rgba {
     // convert all our values to floats in the range [0, 1]
     let r_fg: f32 = fg[0] as f32 / 255.0;
     let g_fg: f32 = fg[1] as f32 / 255.0;
