@@ -1,5 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use rust_alpha_blending::{v1, v2, v3, v4, v5};
+use rust_alpha_blending::{v1, v2, v3, v4, v5, v6, v7};
 
 fn criterion_benchmark(c: &mut Criterion) {
     c.bench_function("v1::blend_rgba", |b| {
@@ -20,6 +20,14 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     c.bench_function("v5::blend_rgba", |b| {
         b.iter(|| v5::blend_rgba(black_box([255, 0, 0, 255]), black_box([0, 0, 255, 127])))
+    });
+
+    c.bench_function("v6::blend_rgba", |b| {
+        b.iter(|| v6::blend_rgba(black_box([255, 0, 0, 255]), black_box([0, 0, 255, 127])))
+    });
+
+    c.bench_function("v7::blend_rgba", |b| {
+        b.iter(|| v7::blend_rgba(black_box([255, 0, 0, 255]), black_box([0, 0, 255, 127])))
     });
 }
 

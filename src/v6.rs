@@ -20,12 +20,15 @@ pub fn blend_rgba(bg: Rgba, fg: Rgba) -> Rgba {
     let b_bg = bg[2] as u32;
     let a_bg = bg[3] as u32;
 
-    // calculate final alpha * 255
-    let a_0 = (a_fg * 255) + (a_bg * 255) - (a_fg * a_bg);
+    let thing_1 = 255 * a_fg;
+    let thing_4 = 255 * a_bg - a_fg * a_bg;
 
-    let r = (255 * r_fg * a_fg + 255 * a_bg * r_bg - a_fg * a_bg * r_bg) / a_0;
-    let g = (255 * g_fg * a_fg + 255 * a_bg * g_bg - a_fg * a_bg * g_bg) / a_0;
-    let b = (255 * b_fg * a_fg + 255 * a_bg * b_bg - a_fg * a_bg * b_bg) / a_0;
+    // calculate final alpha * 255
+    let a_0 = thing_1 + thing_4;
+
+    let r = (thing_1 * r_fg + r_bg * thing_4) / a_0;
+    let g = (thing_1 * g_fg + g_bg * thing_4) / a_0;
+    let b = (thing_1 * b_fg + b_bg * thing_4) / a_0;
 
     [r as u8, g as u8, b as u8, fast_divide_by_255(a_0) as u8]
 }

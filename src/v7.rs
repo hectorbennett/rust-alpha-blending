@@ -1,3 +1,5 @@
+use std::simd::u32x2;
+
 type Rgba = [u8; 4];
 
 #[inline]
@@ -20,14 +22,26 @@ pub fn blend_rgba(bg: Rgba, fg: Rgba) -> Rgba {
     let b_bg = bg[2] as u32;
     let a_bg = bg[3] as u32;
 
+    let thing_1 = 255 * a_fg;
+    let thing_2 = 255 * a_bg - a_fg * a_bg;
+
     // calculate final alpha * 255
-    let a_0 = (a_fg * 255) + (a_bg * 255) - (a_fg * a_bg);
+    let a_0 = thing_1 + thing_2;
 
-    let r = (255 * r_fg * a_fg + 255 * a_bg * r_bg - a_fg * a_bg * r_bg) / a_0;
-    let g = (255 * g_fg * a_fg + 255 * a_bg * g_bg - a_fg * a_bg * g_bg) / a_0;
-    let b = (255 * b_fg * a_fg + 255 * a_bg * b_bg - a_fg * a_bg * b_bg) / a_0;
+    // calculate red and green together with simd
+    let rg = (u32x2::splat(thing_1) * u32x2::from([r_fg, g_fg])
+        + u32x2::splat(thing_2) * u32x2::from([r_bg, g_bg]))
+        / u32x2::splat(a_0);
 
-    [r as u8, g as u8, b as u8, fast_divide_by_255(a_0) as u8]
+    // calculate blue on its own
+    let b = (thing_1 * b_fg + thing_2 * b_bg) / a_0;
+
+    [
+        rg[0] as u8,
+        rg[1] as u8,
+        b as u8,
+        fast_divide_by_255(a_0) as u8,
+    ]
 }
 
 #[test]
@@ -43,4 +57,3 @@ fn test_blend_rgba() {
         [39, 49, 59, 107]
     );
 }
-
