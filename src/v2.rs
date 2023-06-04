@@ -37,4 +37,6 @@ fn test_blend_rgba() {
     let translucent_blue = [0, 0, 255, 127];
     let opaque_purple = [127, 0, 127, 255];
     assert_eq!(blend_rgba(opaque_red, translucent_blue), opaque_purple);
+
+    assert_eq!(blend_rgba([10, 20, 30, 40], [50, 60, 70, 80]), [39, 49, 59, 107]);
 }
